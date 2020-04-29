@@ -1,27 +1,21 @@
 // C++ program for Kruskal's algorithm to find Minimum Spanning Tree 
 // of a given connected, undirected and weighted graph 
+
 #include <bits/stdc++.h> 
 using namespace std; 
 
-// a structure to represent a weighted edge in graph 
 class Edge 
 { 
 	public: 
 	int src, dest, weight; 
 }; 
 
-// a structure to represent a connected, undirected 
-// and weighted graph 
 class Graph 
 { 
 	public: 
-	// V-> Number of vertices, E-> Number of edges 
+	 
 	int V, E; 
-
-	// graph is represented as an array of edges. 
-	// Since the graph is undirected, the edge 
-	// from src to dest is also edge from dest 
-	// to src. Both are counted as 1 edge here. 
+ 
 	Edge* edge; 
 }; 
 
@@ -37,7 +31,6 @@ Graph* createGraph(int V, int E)
 	return graph; 
 } 
 
-// A structure to represent a subset for union-find 
 class subset 
 { 
 	public: 
@@ -45,8 +38,6 @@ class subset
 	int rank; 
 }; 
 
-// A utility function to find set of an element i 
-// (uses path compression technique) 
 int find(subset subsets[], int i) 
 { 
 	// find root and make root as parent of i 
@@ -57,15 +48,11 @@ int find(subset subsets[], int i)
 	return subsets[i].parent; 
 } 
 
-// A function that does union of two sets of x and y 
-// (uses union by rank) 
 void Union(subset subsets[], int x, int y) 
 { 
 	int xroot = find(subsets, x); 
 	int yroot = find(subsets, y); 
 
-	// Attach smaller rank tree under root of high 
-	// rank tree (Union by Rank) 
 	if (subsets[xroot].rank < subsets[yroot].rank) 
 		subsets[xroot].parent = yroot; 
 	else if (subsets[xroot].rank > subsets[yroot].rank) 
@@ -80,8 +67,6 @@ void Union(subset subsets[], int x, int y)
 	} 
 } 
 
-// Compare two edges according to their weights. 
-// Used in qsort() for sorting an array of edges 
 int myComp(const void* a, const void* b) 
 { 
 	Edge* a1 = (Edge*)a; 
@@ -97,10 +82,7 @@ void KruskalMST(Graph* graph)
 	int e = 0; // An index variable, used for result[] 
 	int i = 0; // An index variable, used for sorted edges 
 
-	// Step 1: Sort all the edges in non-decreasing 
-	// order of their weight. If we are not allowed to 
-	// change the given graph, we can create a copy of 
-	// array of edges 
+	 
 	qsort(graph->edge, graph->E, sizeof(graph->edge[0]), myComp); 
 
 	// Allocate memory for creating V ssubsets 
@@ -123,19 +105,14 @@ void KruskalMST(Graph* graph)
 		int x = find(subsets, next_edge.src); 
 		int y = find(subsets, next_edge.dest); 
 
-		// If including this edge does't cause cycle, 
-		// include it in result and increment the index 
-		// of result for next edge 
 		if (x != y) 
 		{ 
 			result[e++] = next_edge; 
 			Union(subsets, x, y); 
 		} 
-		// Else discard the next_edge 
+		
 	} 
 
-	// print the contents of result[] to display the 
-	// built MST 
 	cout<<"Following are the edges in the constructed MST\n"; 
 	for (i = 0; i < e; ++i) 
 		cout<<result[i].src<<" -- "<<result[i].dest<<" == "<<result[i].weight<<endl; 
@@ -145,14 +122,6 @@ void KruskalMST(Graph* graph)
 // Driver code 
 int main() 
 { 
-	/* Let us create following weighted graph 
-			10 
-		0--------1 
-		| \ | 
-	6| 5\ |15 
-		| \ | 
-		2--------3 
-			4 */
 	int V = 4; // Number of vertices in graph 
 	int E = 5; // Number of edges in graph 
 	Graph* graph = createGraph(V, E); 
@@ -187,5 +156,3 @@ int main()
 
 	return 0; 
 } 
-
-// This code is contributed by rathbhupendra 
